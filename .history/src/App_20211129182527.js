@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
 import Person from './Person/Person';
-import Radium, {StyleRoot} from 'radium';
 
 class App extends Component {
   state = {
@@ -11,7 +10,7 @@ class App extends Component {
       { id: 3, name: 'Stephanie', age: 26}
     ],
     othersState: 'some other value',
-    personsState: false,
+    personsState: false
   }
 
   switchNameHandler = () => {
@@ -28,18 +27,14 @@ class App extends Component {
     let personIndex = this.state.persons.findIndex(p => {
       return p.id === id;
     });
-
-    let person = {
-      ...this.state.persons[personIndex]
-    };
     
-    person.name = event.target.value;
-
-    let persons = [...this.state.persons];
-
-    persons[personIndex] = person;
-
-    this.setState({persons: persons});
+    this.setState( {
+      persons: [
+        { name: 'Max', age: 28},
+        { name: event.target.value, age: 29},
+        { name: 'Stephanie', age: 26 }
+      ]
+    } )
   }
 
   togglePersons = () => {
@@ -56,15 +51,11 @@ class App extends Component {
 
   render () {
     const style = {
-      backgroundColor: 'green',
+      backgroundColor: 'white',
       font: 'inherit',
       border: '1px solid blue',
       padding: '8px',
-      cursor: 'pointer',
-      ':hover': {
-        backgroundColor: 'lightgreen',
-        color: 'black'
-      }
+      cursor: 'pointer'
     };
 
     let person = null;
@@ -78,44 +69,27 @@ class App extends Component {
             name={person.name} 
             age={person.age}
             key={person.id} 
-            changed={(event) => this.nameChangedHandler(event, person.id)}/>
+            changed={(event) => nameChangedHandler(event, person.id)}/>
         })}
-        </div> 
+        </div>
+        
       );
-
-      style.backgroundColor = 'red';
-      style[':hover'] = {
-        backgroundColor: 'salmon',
-        color: 'black'
-      };
-    }
-
-    const classes = [];
-
-    if (this.state.persons.length <= 2) {
-      classes.push('red');
-    }
-
-    if (this.state.persons.length <= 1) {
-      classes.push('bold');
     }
 
     return (
-      <StyleRoot>
-        <div className="App">
-          <h1>Hi, I am React App</h1>
-          <p className={classes.join(' ')}>This is really working!</p>
-          <button
-            style={style} 
-            onClick={this.togglePersons}>
-              Toggle Persons
-            </button>
-          { this.state.personsState ? 
-            person : null}
-        </div>
-      </StyleRoot>   
+      <div className="App">
+        <h1>Hi, I am React App</h1>
+        <p>This is really working!</p>
+        <button
+          style={style} 
+          onClick={this.togglePersons}>
+            Toggle Persons
+          </button>
+        { this.state.personsState ? 
+          person : null}
+      </div>
     );
   }
 }
 
-export default Radium(App);
+export default App;

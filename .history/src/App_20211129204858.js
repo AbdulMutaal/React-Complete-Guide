@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import './App.css';
 import Person from './Person/Person';
-import Radium, {StyleRoot} from 'radium';
+import Validation from './ValidationComponent/ValidationComponent';
+import CharComponent from './CharComponent/CharComponent';
+
 
 class App extends Component {
   state = {
@@ -12,6 +14,8 @@ class App extends Component {
     ],
     othersState: 'some other value',
     personsState: false,
+    text: '',
+    textLength: null
   }
 
   switchNameHandler = () => {
@@ -54,17 +58,34 @@ class App extends Component {
     this.setState({persons: person});
   }
 
+  textChangedHandler = (e) => {
+    let textLength = e.target.value.length;
+    
+    this.setState({text: e.target.value});
+    this.setState({textLength: textLength});
+  }
+
+  charChangedHandler = (e, charIndex) => {
+    const text = this.state.text.split('');
+    text.splice(charIndex, 1);
+
+    const updatedText = text.join('');
+    this.setState({text: updatedText});
+  }
+
   render () {
+    const charComponent = this.state.text.split('').map((t, index) => {
+      return (<CharComponent textChar={t} 
+              clicked={(e) => this.charChangedHandler(e, index)} />
+      )
+    });
+
     const style = {
-      backgroundColor: 'green',
+      backgroundColor: 'white',
       font: 'inherit',
       border: '1px solid blue',
       padding: '8px',
-      cursor: 'pointer',
-      ':hover': {
-        backgroundColor: 'lightgreen',
-        color: 'black'
-      }
+      cursor: 'pointer'
     };
 
     let person = null;
@@ -84,38 +105,26 @@ class App extends Component {
       );
 
       style.backgroundColor = 'red';
-      style[':hover'] = {
-        backgroundColor: 'salmon',
-        color: 'black'
-      };
-    }
-
-    const classes = [];
-
-    if (this.state.persons.length <= 2) {
-      classes.push('red');
-    }
-
-    if (this.state.persons.length <= 1) {
-      classes.push('bold');
     }
 
     return (
-      <StyleRoot>
-        <div className="App">
-          <h1>Hi, I am React App</h1>
-          <p className={classes.join(' ')}>This is really working!</p>
-          <button
-            style={style} 
-            onClick={this.togglePersons}>
-              Toggle Persons
-            </button>
-          { this.state.personsState ? 
-            person : null}
-        </div>
-      </StyleRoot>   
+      <div className="App">
+        <h1>Hi, I am React App</h1>
+        <p>This is really working!</p>
+        <button
+          style={style} 
+          onClick={this.togglePersons}>
+            Toggle Persons
+          </button>
+        { this.state.personsState ? 
+          person : null}
+        <input type='text' onChange={(e) => this.textChangedHandler(e)} value={this.state.text} />
+        {this.state.textLength}
+        {/* <Validation textLength={this.state.textLength} /> */}
+        {/* {charComponent} */}
+      </div>
     );
   }
 }
 
-export default Radium(App);
+export default App;

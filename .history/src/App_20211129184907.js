@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
 import Person from './Person/Person';
-import Radium, {StyleRoot} from 'radium';
 
 class App extends Component {
   state = {
@@ -12,6 +11,8 @@ class App extends Component {
     ],
     othersState: 'some other value',
     personsState: false,
+    text: '',
+    textLength: 0
   }
 
   switchNameHandler = () => {
@@ -54,17 +55,20 @@ class App extends Component {
     this.setState({persons: person});
   }
 
+  textChangedHandler = (e) => {
+    let textLength = (e.target.value);
+    
+    this.setState({text: e.target.value});
+    this.setState({textLength: textLength});
+  }
+
   render () {
     const style = {
-      backgroundColor: 'green',
+      backgroundColor: 'white',
       font: 'inherit',
       border: '1px solid blue',
       padding: '8px',
-      cursor: 'pointer',
-      ':hover': {
-        backgroundColor: 'lightgreen',
-        color: 'black'
-      }
+      cursor: 'pointer'
     };
 
     let person = null;
@@ -80,42 +84,27 @@ class App extends Component {
             key={person.id} 
             changed={(event) => this.nameChangedHandler(event, person.id)}/>
         })}
-        </div> 
+        </div>
+        
       );
-
-      style.backgroundColor = 'red';
-      style[':hover'] = {
-        backgroundColor: 'salmon',
-        color: 'black'
-      };
-    }
-
-    const classes = [];
-
-    if (this.state.persons.length <= 2) {
-      classes.push('red');
-    }
-
-    if (this.state.persons.length <= 1) {
-      classes.push('bold');
     }
 
     return (
-      <StyleRoot>
-        <div className="App">
-          <h1>Hi, I am React App</h1>
-          <p className={classes.join(' ')}>This is really working!</p>
-          <button
-            style={style} 
-            onClick={this.togglePersons}>
-              Toggle Persons
-            </button>
-          { this.state.personsState ? 
-            person : null}
-        </div>
-      </StyleRoot>   
+      <div className="App">
+        <h1>Hi, I am React App</h1>
+        <p>This is really working!</p>
+        <button
+          style={style} 
+          onClick={this.togglePersons}>
+            Toggle Persons
+          </button>
+        { this.state.personsState ? 
+          person : null}
+        <input type='text' onChange={(e) => this.textChangedHandler(e)} value={this.state.text} />
+        {this.state.textLength}
+      </div>
     );
   }
 }
 
-export default Radium(App);
+export default App;

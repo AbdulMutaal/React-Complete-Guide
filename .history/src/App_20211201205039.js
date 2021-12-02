@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import Person from './Person/Person';
-import Radium, {StyleRoot} from 'radium';
+import Radium from 'radium';
 
 class App extends Component {
   state = {
@@ -60,11 +60,7 @@ class App extends Component {
       font: 'inherit',
       border: '1px solid blue',
       padding: '8px',
-      cursor: 'pointer',
-      ':hover': {
-        backgroundColor: 'lightgreen',
-        color: 'black'
-      }
+      cursor: 'pointer'
     };
 
     let person = null;
@@ -101,19 +97,17 @@ class App extends Component {
     }
 
     return (
-      <StyleRoot>
-        <div className="App">
-          <h1>Hi, I am React App</h1>
-          <p className={classes.join(' ')}>This is really working!</p>
-          <button
-            style={style} 
-            onClick={this.togglePersons}>
-              Toggle Persons
-            </button>
-          { this.state.personsState ? 
-            person : null}
-        </div>
-      </StyleRoot>   
+      <div className="App">
+        <h1>Hi, I am React App</h1>
+        <p className={classes.join(' ')}>This is really working!</p>
+        <button
+          style={style} 
+          onClick={this.togglePersons}>
+            Toggle Persons
+          </button>
+        { this.state.personsState ? 
+          person : null}
+      </div>
     );
   }
 }
